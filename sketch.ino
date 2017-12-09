@@ -180,7 +180,22 @@ void createWebServer(int webtype)
       for (int i = 0; i < 96; ++i) { EEPROM.write(i, 0); }
       EEPROM.commit();
     });
+    server.on("/pin", []() {
+      pinMode(server.arg("id").toInt(),OUTPUT);
+      if(server.arg("action") == "an") {
+        digitalWrite(server.arg("id").toInt(), HIGH); 
+      } else {
+        digitalWrite(server.arg("id").toInt(), LOW);
+      }
+      server.send(200, "application/json", "succesfull");
+    });
   }
+}
+
+void setColor(int redPin, int greenPin, int bluePin, int red, int green, int blue) {
+  analogWrite(redPin, red);
+  analogWrite(greenPin, green);
+  analogWrite(bluePin, blue);
 }
 
 void loop() {
