@@ -1,10 +1,11 @@
-//#include <fauxmoESP.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+//#include <fauxmoESP.h>
 #include <EEPROM.h>
 
-ESP8266WebServer server(80);
 //fauxmoESP fauxmo;
+ESP8266WebServer server(80);
+
 
 const char* ssid = "lil_uzi_vert";
 const char* passphrase = "KEnnwort01";
@@ -12,14 +13,13 @@ String st;
 String content;
 int statusCode;
 
+void fauxmo_callback(uint8_t device_id, const char * device_name, bool state) {
+  Serial.printf("[MAIN] %s state: %s\n", device_name, state ? "ON" : "OFF");
+}
 void setup() {
     Serial.begin(9600);
     EEPROM.begin(512);
     delay(10);
-    //fauxmo.addDevice("hundeklappe");
-    //fauxmo.onMessage([](unsigned char device_id, const char * device_name, bool state) {
-    //  Serial.printf("[MAIN] Device #%d (%s) state: %s\n", device_id, device_name, state ? "ON" : "OFF");
-    //});
     Serial.println();
     Serial.println();
     Serial.println("System Online");
@@ -47,6 +47,9 @@ void setup() {
             return;
         }
     }
+    /*fauxmo.addDevice("TEST1");
+    fauxmo.addDevice("TEST2");
+    fauxmo.onMessage(callback);*/
     setupAP();
 }
 
@@ -183,14 +186,12 @@ void createWebServer(int webtype)
             server.send(200, "application/json", "{\"IP\":\"" + ipStr + "\"}");
         });
         server.on("/cleareeprom", []() {
-            content = "<!DOCTYPE HTML>\r\n<html>";
-            content += "<p>Clearing the EEPROM</p></html>";
-            server.send(200, "text/html", content);
-            Serial.println("clearing eeprom");
-            for (int i = 0; i < 96; ++i) {
-                EEPROM.write(i, 0);
-            }
-            EEPROM.commit();
+      content = "<!DOCTYPE HTML>\r\n<html>";
+      content += "<p>Clearing the EEPROM</p></html>";
+      server.send(200, "text/html", content);
+      Serial.println("clearing eeprom");
+      for (int i = 0; i < 96; ++i) { EEPROM.write(i, 0); }
+      EEPROM.commit();
         });
         server.on("/pin", []() {
             pinMode(server.arg("id").toInt(),OUTPUT);
@@ -214,3 +215,4 @@ void loop() {
     //fauxmo.handle();
     server.handleClient();
 }
+
