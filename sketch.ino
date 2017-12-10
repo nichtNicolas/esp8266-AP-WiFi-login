@@ -77,8 +77,9 @@ void setupAP(void) {
   delay(100);
   int n = WiFi.scanNetworks();
   Serial.println("scan done");
-  if (n == 0)
+  if (n == 0) {
     Serial.println("no networks found");
+  }
   else
   {
     Serial.print(n);
