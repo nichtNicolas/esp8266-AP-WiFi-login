@@ -6,8 +6,9 @@ Allows you to save credentials of an WiFi Access Point in the EEPROM and connect
 - [x] WebUI
 - [ ] Settings
 - [x] EEPROM saving
-- [ ] control of GPIO pins in the WebUI
+- [x] control of GPIO pins in the WebUI
 - [ ] custom server events
+- [ ] Alexa support
 
 #### Usage:
 
